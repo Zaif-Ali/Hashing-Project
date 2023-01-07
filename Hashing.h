@@ -36,12 +36,11 @@ public:
         }
         int i = 0;
         while (Table[hashIndex] != KeyValue && i < size)
-        { // If the slot at the calculated hash index is not empty
-
-            hashIndex = (hashIndex + 1) % size; // Try the next slot in the Table
+        {
+            hashIndex = (hashIndex + 1) % size;
             i++;
         }
-        if (i == size) // if the slot is present
+        if (i == size) // if not present
         {
             Found = false;
             return -1;
