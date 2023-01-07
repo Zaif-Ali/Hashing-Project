@@ -1,179 +1,20 @@
 #include <iostream>
 #include <cmath>
-using namespace std;
-#define SuccessCode 201
-#define NotModified 304
-#define DefaultValue -1
-#define NotFound 404
-class HashTable
-{
-private:
-    int *Table;
-    int size = 10;
-    int SpaceLeft = size;
+#include "FunctionControllers.h"
 
-public:
-    HashTable() // default Constructor
-    {
-        Table = new int[size];
-        Define();
-    }
-    HashTable(int Size) // Given size Constructor
-    {
-        Size = abs(Size); // if size is negative
-        Table = new int[Size];
-        size = Size;
-        Define();
-    }
-    int Search(int KeyValue)
-    {
-        bool Found = false;
-        int hashIndex = hash(KeyValue);
-        if (Table[hashIndex] == KeyValue)
-        {
-            Found = true;
-            return hashIndex;
-        }
-        int i = 0;
-        while (Table[hashIndex] != KeyValue && i < size)
-        { // If the slot at the calculated hash index is not empty
-
-            hashIndex = (hashIndex + 1) % size; // Try the next slot in the Table
-            i++;
-        }
-        if (i == size) // if the slot is present
-        {
-            Found = false;
-            return -1;
-        }
-    }
-    int Insert(int value)
-    {
-        if (SpaceLeft == 0)
-        {
-            return NotModified;
-        }
-        int hashIndex = hash(value); // Calculate the hash index of the key
-        // if the slot is empty, then insert the value
-        if (Table[hashIndex] == DefaultValue)
-        {
-            Table[hashIndex] = value;
-            SpaceLeft--;
-            return SuccessCode;
-        }
-        // int ActualIndex = hashIndex;
-        int i = 0;
-        bool Flag = false;
-        while (Table[hashIndex] != DefaultValue && i < size)
-        { // If the slot at the calculated hash index is not empty
-
-            hashIndex = (hashIndex + 1) % size; // Try the next slot in the Table
-            i++;
-        }
-        if (i != size) // if the slot is present
-        {
-            Table[hashIndex] = value;
-            SpaceLeft--;
-            return SuccessCode;
-        }
-        // if the slot is not present
-        return NotModified;
-    }
-    int Delete(int KeyValue)
-    {
-        int index = Search(KeyValue);
-        if (index == -1)
-        {
-            return NotFound;
-        }
-        Table[index] = DefaultValue;
-        SpaceLeft++;
-        return SuccessCode;
-    }
-    int Update(int KeyValue, int Value){
-         int index = Search(KeyValue);
-        if (index == -1)
-        {
-            return NotFound;
-        }
-        Table[index] = Value;
-        return SuccessCode;
-
-    }
-    void Show()
-    {
-        for (int i = 0; i < size; i++)
-        {
-            cout << Table[i] << endl;
-        }
-        cout << "Space left: " << SpaceLeft << endl;
-    };
-    // Provate Functions work as a Decorators / Helper Functions
-private:
-    void Define()
-    {
-        for (int i = 0; i < size; i++)
-        {
-            Table[i] = DefaultValue;
-        }
-    }
-    int hash(int val)
-    {
-        return val % size;
-    }
-};
-int AddCNIC(HashTable &TableName, int value)
+main()
 {
-    int response = TableName.Insert(value);
-    return response;
-}
-int AddCNIC(HashTable &TableName, int *arr, int SizedValue)
-{
-    for (int i = 0; i < SizedValue; i++)
-    {
-        int response = TableName.Insert(arr[i]);
-        if (response == NotModified)
-        {
-            cout << "Only " << i << " entries are modified out of " << SizedValue << " - " << SizedValue - i << " entries are left" << endl;
-            break;
-        }
-    }
-}
-int SearchCNIC(HashTable &TableName, int Key)
-{
-    cout << TableName.Search(Key);
-}
-void ShowAllData(HashTable &TableName)
-{
-    TableName.Show();
-}
-void DeleteCNIC(HashTable &TableName, int Key)
-{
-    if (TableName.Delete(Key) == 404)
-    {
-        cout << "Error in deleting" << endl;
-    }
-    else
-    {
-        cout << "Deleted" << endl;
-    }
-}
-int main()
-{
-    HashTable t(10);
-    
+    HashTable NADRA(10);
     int arr[] = {11111, 223233, 322432532, 4364387, 5786323, 63698294, 7742874, 834343249, 93143232, 102252441, 153541, 267628, 289829};
     int size = sizeof(arr) / sizeof(arr[0]);
-    
-    AddCNIC(t, arr, size);
-    AddCNIC(t, 43);
-    ShowAllData(t);
-    cout<<endl;
-    SearchCNIC(t, 21111);
-    DeleteCNIC(t,223233);
-    ShowAllData(t);
-    cout<<endl;
-    t.Update(11111,222221);
-    ShowAllData(t);
-    return 0;
+    AddCNIC(NADRA, arr, size);
+    AddCNIC(NADRA, 43);
+    ShowAllData(NADRA);
+    cout << endl;
+    SearchCNIC(NADRA, 21111);
+    DeleteCNIC(NADRA, 223233);
+    ShowAllData(NADRA);
+    cout << endl;
+    NADRA.Update(11111, 222221);
+    ShowAllData(NADRA);
 }
